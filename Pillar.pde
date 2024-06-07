@@ -6,10 +6,10 @@ public class Pillar {
   float yPos;
 
   public Pillar (int i) {
-  this.Width = 10;
-  this.Height = 440;
-  this.xPos = 142.5 + i * (142.5 + Width);
-  this.yPos = 150;
+    this.Width = 10;
+    this.Height = 440;
+    this.xPos = 142.5 + i * (142.5 + Width);
+    this.yPos = 150;
   }
   
   public void show() {
