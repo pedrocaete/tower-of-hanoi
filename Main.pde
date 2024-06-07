@@ -1,15 +1,16 @@
 import java.util.Stack;
 
 Stack<Disc>[] tower = new Stack[3];
-Pillar pillar = new Pillar();
+Pillar pillar[] = new Pillar[3];
 int move = -1;
-int i = 0;
+int referencedDisc = 0;
 void setup() {
   size(600, 600);
   int totalDiscs = 10;
   
   for (int i = 0; i < 3; i++) {
     tower[i] = new Stack<>();
+    pillar[i] = new Pillar(i);
   }
     
   for (int i = 0; i < totalDiscs; i++) {
@@ -21,69 +22,60 @@ void setup() {
 
 void draw() {
   background(255);
-  pillar.show();
+  
+  
   for (int i = 0; i < 3; i++) {
+    pillar[i].show();
     for (Disc disc : tower[i])
       disc.show();
   }
-  Disc d = tower[i].peek();
+  
+  Disc d = tower[referencedDisc].peek();
   d.show();
+  
   if(move == 1){
-    d.xPos = mouseX;
-    d.yPos = mouseY;
+    d.xPos = mouseX - d.dWidth/2;
+    d.yPos = mouseY - d.dHeight/2;
   }
 }
 
 public void mousePressed(){  
-  Disc d = tower[i].peek(); 
+  //Disc that is been referenced
+  Disc d = tower[referencedDisc].peek();
   Disc[] disc = new Disc[3];
 
   //Create a instance of peek disc for each tower
-  for (int j = 0; j < 3; j ++){
-    if (!tower[j].isEmpty()){
-      disc[j] = tower[j].peek();
+  for (int i = 0; i < 3; i ++){
+    if (!tower[i].isEmpty()){
+      disc[i] = tower[i].peek();
     }
     else{
-      disc[j] = new Disc();
+      disc[i] = new Disc();
     }
   }
 
   //To the disc follows the mouse after it is mousePressed
-  for (int j =0; j < 3; j ++){
-    if (mouseX >= disc[j].xPos && mouseX <= disc[j].xPos + disc[j].dWidth &&
-        mouseY >= disc[j].yPos && mouseY <= disc[j].yPos + disc[j].dHeight) {
-      d = tower[j].peek();
-      i = j;
+  for (int i =0; i < 3; i ++){
+    if (mouseX >= disc[i].xPos && mouseX <= disc[i].xPos + disc[i].dWidth &&
+        mouseY >= disc[i].yPos && mouseY <= disc[i].yPos + disc[i].dHeight) {
       move = -move;
-      d = tower[i].peek(); 
+      referencedDisc = i;
+      d = tower[referencedDisc].peek(); 
     }
   }
-  
   //Repositions the disc after a click in a allowed local
   if (mouseX >= d.xPos && mouseX <= d.xPos + d.dWidth &&
       mouseY >= d.yPos && mouseY <= d.yPos + d.dHeight) {
-    if(mouseY >= pillar.yPos && mouseY <= pillar.yPos + pillar.pHeight){
-      if (move == -1 && mouseX >= pillar.xPos1 && mouseX <= pillar.xPos1 + pillar.pWidth){
-        d.xPos = pillar.xPos1 - d.dWidth/2 + 5;
-        d.yPos = height - (d.dHeight * (tower[0].size() + 1)) - 10;  
-        disc[0] = tower[0].push(d); 
-        tower[i].pop();
-        i = 0;
-      }
-      else if (move == -1 && mouseX >= pillar.xPos2 && mouseX <= pillar.xPos2 + pillar.pWidth){
-        d.xPos = pillar.xPos2 - d.dWidth/2 + 5;
-        d.yPos = height - (d.dHeight * (tower[1].size() + 1)) - 10;   
-        disc[1] = tower[1].push(d); 
-        tower[i].pop();
-        i = 1;
-      }
-      else if (move == -1 && mouseX >= pillar.xPos3 && mouseX <= pillar.xPos3 + pillar.pWidth){
-        d.xPos = pillar.xPos3 - d.dWidth/2 + 5;
-        d.yPos = height - (d.dHeight * (tower[2].size() + 1)) - 10;  
-        disc[2] = tower[2].push(d);
-        tower[i].pop();
-        i = 2;
+    for (int i = 0; i < 3; i ++){
+      if(mouseY >= pillar[i].yPos && mouseY <= pillar[i].yPos + pillar[i].Height){
+        if (move == -1 && mouseX >= pillar[i].xPos -25 && mouseX <= pillar[i].xPos + pillar[i].Width + 25){
+          tower[referencedDisc].pop();
+          d.xPos = pillar[i].xPos - d.dWidth/2 + 5;
+          d.yPos = height - (d.dHeight * (tower[i].size() + 1)) - 10;  
+          disc[i] = tower[i].push(d); 
+          referencedDisc = i;
+        }
       }
     }
-  }
+  }  
 }
