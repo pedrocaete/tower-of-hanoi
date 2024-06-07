@@ -18,6 +18,10 @@ public class Disc {
     this.color3 = random(255);
   }
   
+  public Disc(){
+  
+  }
+  
   public void show(){
     fill(color1, color2, color3);
     rect(xPos,yPos,dWidth,dHeight);

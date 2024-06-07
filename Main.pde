@@ -26,7 +26,7 @@ void draw() {
     for (Disc disc : tower[i])
       disc.show();
   }
-  Disc d = tower[0].peek();
+  Disc d = tower[i].peek();
   d.show();
   if(move == 1){
     d.xPos = mouseX;
@@ -35,46 +35,53 @@ void draw() {
 }
 
 public void mousePressed(){  
- Disc d = tower[i].peek();
- 
-  //To the disc follows the mouse after it is pressed
-  if (mouseX >= d.xPos && mouseX <= d.xPos + d.dWidth &&
-      mouseY >= d.yPos && mouseY <= d.yPos + d.dHeight) {
-    move = -move;
+  Disc d = tower[i].peek(); 
+  Disc[] disc = new Disc[3];
+
+  //Create a instance of peek disc for each tower
+  for (int j = 0; j < 3; j ++){
+    if (!tower[j].isEmpty()){
+      disc[j] = tower[j].peek();
+    }
+    else{
+      disc[j] = new Disc();
+    }
+  }
+
+  //To the disc follows the mouse after it is mousePressed
+  for (int j =0; j < 3; j ++){
+    if (mouseX >= disc[j].xPos && mouseX <= disc[j].xPos + disc[j].dWidth &&
+        mouseY >= disc[j].yPos && mouseY <= disc[j].yPos + disc[j].dHeight) {
+      d = tower[j].peek();
+      i = j;
+      move = -move;
+      d = tower[i].peek(); 
+    }
   }
   
+  //Repositions the disc after a click in a allowed local
   if (mouseX >= d.xPos && mouseX <= d.xPos + d.dWidth &&
       mouseY >= d.yPos && mouseY <= d.yPos + d.dHeight) {
-    //Repositions the disc after a click in a allowed local
     if(mouseY >= pillar.yPos && mouseY <= pillar.yPos + pillar.pHeight){
       if (move == -1 && mouseX >= pillar.xPos1 && mouseX <= pillar.xPos1 + pillar.pWidth){
         d.xPos = pillar.xPos1 - d.dWidth/2 + 5;
-        d.yPos = height - d.dHeight - 10;  
-        tower[0].push(d); 
+        d.yPos = height - (d.dHeight * (tower[0].size() + 1)) - 10;  
+        disc[0] = tower[0].push(d); 
         tower[i].pop();
-        print("Pinto");
-        print(tower[i].size());
-        print(tower[0].size());
         i = 0;
       }
       else if (move == -1 && mouseX >= pillar.xPos2 && mouseX <= pillar.xPos2 + pillar.pWidth){
         d.xPos = pillar.xPos2 - d.dWidth/2 + 5;
-        d.yPos = height - d.dHeight - 10;   
-        tower[1].push(d); 
+        d.yPos = height - (d.dHeight * (tower[1].size() + 1)) - 10;   
+        disc[1] = tower[1].push(d); 
         tower[i].pop();
-        print("penis");
-        print(tower[i].size());
-        print(tower[1].size());
         i = 1;
       }
       else if (move == -1 && mouseX >= pillar.xPos3 && mouseX <= pillar.xPos3 + pillar.pWidth){
         d.xPos = pillar.xPos3 - d.dWidth/2 + 5;
-        d.yPos = height - d.dHeight - 10;  
-        tower[2].push(d);
+        d.yPos = height - (d.dHeight * (tower[2].size() + 1)) - 10;  
+        disc[2] = tower[2].push(d);
         tower[i].pop();
-        print("Vagina");
-        print(tower[i].size());
-        print(tower[2].size());
         i = 2;
       }
     }
