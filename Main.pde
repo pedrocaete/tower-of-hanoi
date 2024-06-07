@@ -5,10 +5,12 @@ Pillar pillar[] = new Pillar[3];
 int move = -1;
 int referencedDisc = 0;
 float size = random (110, 135);
+int totalDiscs = 5;
+boolean win = false;
+Timer timer = new Timer();
 
 void setup() {
   size(600, 600);
-  int totalDiscs = 5;
   
   for (int i = 0; i < 3; i++) {
     tower[i] = new Stack<>();
@@ -23,27 +25,50 @@ void setup() {
 }
 
 void draw() {
-  background(255);
+  
+  if(win == false){
+    background(255);
+    
+    timer.show();
+    timer.update();
 
-  for (int i = 0; i < 3; i++) {
-    pillar[i].show();
-    for (Disc disc : tower[i])
-      disc.show();
+    for (int i = 0; i < 3; i++) {
+      pillar[i].show();
+      for (Disc disc : tower[i])
+        disc.show();
+    }
+    
+    Disc d = tower[referencedDisc].peek();
+    d.show();
+    
+    //To the disc follows the mouse after it is mousePressed
+    if (move == 1) {
+      d.xPos = mouseX - d.Width/2;
+      d.yPos = mouseY - d.Height/2;
+    }
+  }
+  else{
+    background(255);
+    fill(20,255,20); 
+    textAlign(CENTER);
+    textSize(140);
+    text("YOU WIN", width/2, height/3);
+    textSize(50);
+    fill(121);
+    textAlign(RIGHT);
+    text("TIME: " + timer.formatedTime, width/2, height/2);
   }
   
-  Disc d = tower[referencedDisc].peek();
-  d.show();
-  
-  //To the disc follows the mouse after it is mousePressed
-  if(move == 1){
-    d.xPos = mouseX - d.Width/2;
-    d.yPos = mouseY - d.Height/2;
+  //Verify if the player wins
+  if (tower[1].size() == totalDiscs || tower[2].size() == totalDiscs){
+    win = true;  
   }
 }
 
 public void mousePressed(){  
   //Disc that is been referenced
   Disc d = tower[referencedDisc].peek();
+  
   Disc[] disc = new Disc[3];
 
   //Create a instance of peek disc for each tower
