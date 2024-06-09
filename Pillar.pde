@@ -7,9 +7,9 @@ public class Pillar {
 
   public Pillar (int i) {
     this.Width = 10;
-    this.Height = 440;
+    this.Height = 490;
     this.xPos = 142.5 + i * (142.5 + Width);
-    this.yPos = 150;
+    this.yPos = 100;
   }
   
   public void show() {
