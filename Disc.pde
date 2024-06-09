@@ -23,7 +23,7 @@ public class Disc {
   
   public void show(){
     fill(color1, color2, color3);
-    rect(xPos,yPos,Width,Height);
+    rect(xPos,yPos,Width,Height,2);
   }
   
 }
