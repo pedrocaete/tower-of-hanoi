@@ -9,12 +9,12 @@ Timer timer = new Timer();
 
 int move = -1; //Allows the disc to follow the mouse
 int referencedDisc = 0; 
-float size = random (110, 135); //Size of the biggest disc
 int totalDiscs = 5;
+float size = random (110, 135); //Size of the biggest disc
 boolean win = false;
 boolean menu = true;
-String formatedMenu = String.format("TOWER SIZE + %d -", totalDiscs);
 boolean initialize = true; //To initialize the stack after the choice the TotalDiscs
+String formatedMenu = String.format("TOWER SIZE + %d -", totalDiscs);
 
 void setup() {
   size(600, 600);
@@ -30,13 +30,34 @@ void setup() {
 
 void draw() {
   if (menu){
+    initialMenu(); 
+  }
+  else{
+    if(win == false){  
+      game();
+    }
+    else{
+      finaMenu();
+    }
+  }
+
+  //Verify if the player wins
+  if (tower[1].size() == totalDiscs || tower[2].size() == totalDiscs){
+    win = true;  
+  }
+}
+
+
+
+public void initialMenu(){
+    //Interface of initial menu
     image(background, 0, 0, width, height);
     fill(255);
     textSize(40);
     text("PLAY", width/7, height/4);
     text("TOWER SIZE + " + totalDiscs, width/18, height/2.5);
     text("-",width/18 + 16.2 * textWidth(formatedMenu.charAt(15)), height/2.5);
-    
+
     //Verify if the mouse is on the + button
     if (mouseX >= width/18 + 12 * textWidth(formatedMenu.charAt(12)) && mouseX <= width/18 + 13 * textWidth(formatedMenu.charAt(12)) &&
         mouseY >= height/2.5 - 40 && mouseY <= height/2.5) {
@@ -57,10 +78,21 @@ void draw() {
       fill(0,0,255);
       text("PLAY", width/7 + 0.5, height/4 + 0.5);
     }
-    
-  }
-  else{
-    if(win == false){  
+}
+
+public void finaMenu(){
+      image(background, 0, 0, width, height);
+      fill(20,255,20); 
+      textAlign(CENTER);
+      textSize(40);
+      text("YOU WIN", width/2, height/3);
+      textSize(20);
+      fill(255);
+      textAlign(RIGHT);
+      text("TIME: " + timer.formatedTime, width/2, height/2.5);
+}
+
+public void game(){
       if (initialize) {
         for (int i = 0; i < totalDiscs; i++) {
           tower[0].push(new Disc(i,size));
@@ -85,27 +117,8 @@ void draw() {
         d.xPos = mouseX - d.Width/2;
         d.yPos = mouseY - d.Height/2;
       }
-    }
-    else{
-      image(background, 0, 0, width, height);
-      fill(20,255,20); 
-      textAlign(CENTER);
-      textSize(40);
-      text("YOU WIN", width/2, height/3);
-      textSize(20);
-      fill(255);
-      textAlign(RIGHT);
-      text("TIME: " + timer.formatedTime, width/2, height/2.5);
-    }
-  }
-  
-  //Verify if the player wins
-  if (tower[1].size() == totalDiscs || tower[2].size() == totalDiscs){
-    win = true;  
-  }
 }
-
-public void mousePressed(){  
+public void moveDisc(){
   if (initialize == false){
     Disc d = tower[referencedDisc].peek(); //Disc that is been referenced
     Disc[] disc = new Disc[3];
@@ -145,6 +158,9 @@ public void mousePressed(){
       }
     }
   }
+}
+
+public void changeTotalDiscs(){
   //Sums or diminishes the totalDiscs if the mouse is pressed on + or -
   if (mouseX >= width/18 + 12 * textWidth(formatedMenu.charAt(12)) && mouseX <= width/18 + 13 * textWidth(formatedMenu.charAt(12)) &&
       mouseY >= height/2.5 - 40 && mouseY <= height/2.5) {
@@ -155,10 +171,18 @@ public void mousePressed(){
       mouseY >= height/2.5 - 40 && mouseY <= height/2.5) {
     totalDiscs --;
   }
-  
+}
+
+public void startGame(){
   //Initiates the game with the play pressed
   if (mouseX >= width/7 && mouseX <= width/7 + 4* textWidth("Play".charAt(0)) &&
       mouseY >= height/4 - 40 && mouseY <= height/4) {
     menu = false;
   }
+}
+
+public void mousePressed(){  
+  moveDisc();
+  changeTotalDiscs();
+  startGame();
 }
