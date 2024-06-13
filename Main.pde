@@ -18,8 +18,8 @@ String formatedMenu = String.format("TOWER SIZE + %d -", totalDiscs);
 
 void setup() {
   size(600, 600);
-  background = loadImage("Fundo.jpg");
-  font = createFont("font.TTF",32);
+  background = loadImage("visual_assets/Fundo.jpg");
+  font = createFont("visual_assets/font.TTF",32);
   textFont(font);
   
   for (int i = 0; i < 3; i++) {
@@ -37,7 +37,7 @@ void draw() {
       game();
     }
     else{
-      finaMenu();
+      finalMenu();
     }
   }
 
@@ -80,7 +80,7 @@ public void initialMenu(){
     }
 }
 
-public void finaMenu(){
+public void finalMenu(){
       image(background, 0, 0, width, height);
       fill(20,255,20); 
       textAlign(CENTER);
